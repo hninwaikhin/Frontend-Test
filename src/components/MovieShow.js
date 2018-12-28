@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Movies.css";
+import "./MovieShow.css";
 import "./circle.css";
 import $ from "jquery";
 import { FaHeart } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-class MovieBox extends Component {
+class MovieShow extends Component {
   state = {
     watchlist: [],
     items: [],
@@ -491,4 +491,4 @@ const TrailerModal = ({ handleCloseTrailer, show, children }) => {
   );
 };
 
-export default MovieBox;
+export default MovieShow;

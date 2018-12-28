@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./Movies.css";
+import "./MovieShow.css";
 import "./circle.css";
 import $ from "jquery";
 import { FaHeart } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-class WatchedMovies extends Component {
+class WatchMovieShow extends Component {
   state = {
     watchlist: [],
     items: [],
@@ -53,7 +53,7 @@ class WatchedMovies extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "?api_key=4ccda7a34189fcea2fc752a6ee339500&append_to_response=credits";
+      "?api_key=40c4aa46310b723fa9400363a0f2893c&append_to_response=credits";
 
     $.ajax({
       url: urlString,
@@ -100,7 +100,7 @@ class WatchedMovies extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/similar?api_key=4ccda7a34189fcea2fc752a6ee339500&language=en-US";
+      "/similar?api_key=40c4aa46310b723fa9400363a0f2893c&language=en-US";
 
     $.ajax({
       url: urlString,
@@ -133,7 +133,7 @@ class WatchedMovies extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/images?api_key=4ccda7a34189fcea2fc752a6ee339500&language=ru-RU&include_image_language=ru,null";
+      "/images?api_key=40c4aa46310b723fa9400363a0f2893c&language=ru-RU&include_image_language=ru,null";
 
     $.ajax({
       url: urlString,
@@ -165,7 +165,7 @@ class WatchedMovies extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/videos?api_key=4ccda7a34189fcea2fc752a6ee339500&language=en-US";
+      "/videos?api_key=40c4aa46310b723fa9400363a0f2893c&language=en-US";
 
     $.ajax({
       url: urlString,
@@ -464,4 +464,4 @@ const TrailerModal = ({ handleCloseTrailer, show, children }) => {
   );
 };
 
-export default WatchedMovies;
+export default WatchMovieShow;

@@ -3,7 +3,7 @@ import "./App.css";
 import "./FontStyle.css";
 //import { FaSistrix } from "react-icons/fa";
 
-import Movies from "./components/Movies.js";
+import MovieShow from "./components/MovieShow.js";
 
 import $ from "jquery";
 
@@ -39,7 +39,7 @@ class App extends Component {
               "https://image.tmdb.org/t/p/w185" + movie.poster_path;
             var date = movie.release_date.split("-");
             movie.release_date = date[0];
-            const movieBox = <Movies key={movie.id} movie={movie} />;
+            const movieBox = <MovieShow key={movie.id} movie={movie} />;
             movieBoxes.push(movieBox);
           });
           if (i === this.pageCnt) {
@@ -73,7 +73,7 @@ class App extends Component {
           }
           var date = movie.release_date.split("-");
           movie.release_date = date[0];
-          const movieBox = <Movies key={movie.id} movie={movie} />;
+          const movieBox = <MovieShow key={movie.id} movie={movie} />;
           movieBoxes.push(movieBox);
         });
         this.setState({ rows: movieBoxes });

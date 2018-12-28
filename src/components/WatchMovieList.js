@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import "./WatchedLists.css";
-import WatchedMovies from "./WatchedMovies.js";
-import Movies from "./Movies.js";
+import "./WatchMovieList.css";
+import WatchMovieShow from "./WatchMovieShow.js";
+import MovieShow from "./MovieShow.js";
 import $ from "jquery";
 
-class WatchedLists extends Component {
+class WatchMovieList extends Component {
   state = { watchList: [] };
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ class WatchedLists extends Component {
     }
     Array.prototype.forEach.call(watchlist, movie => {
       const movieBox = (
-        <WatchedMovies
+        <WatchMovieShow
           displayWatchlist={this.displayWatchlist}
           key={movie.id}
           movie={movie}
@@ -37,7 +37,7 @@ class WatchedLists extends Component {
   //search movies by input keyword
   performSearch(searchTerm) {
     const urlString =
-      "https://api.themoviedb.org/3/search/movie?api_key=4ccda7a34189fcea2fc752a6ee339500&query=" +
+      "https://api.themoviedb.org/3/search/movie?api_key=40c4aa46310b723fa9400363a0f2893c&query=" +
       searchTerm;
 
     $.ajax({
@@ -53,7 +53,7 @@ class WatchedLists extends Component {
             movie.poster =
               "https://www.underconsideration.com/brandnew/archives/google_broken_image_00_b_logo_detail.gif";
           }
-          const movieBox = <Movies key={movie.id} movie={movie} />;
+          const movieBox = <MovieShow key={movie.id} movie={movie} />;
           movieBoxes.push(movieBox);
         });
         this.setState({ rows: movieBoxes });
@@ -113,4 +113,4 @@ class WatchedLists extends Component {
   }
 }
 
-export default WatchedLists;
+export default WatchMovieList;

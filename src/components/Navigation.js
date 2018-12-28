@@ -9,7 +9,7 @@ class Navigation extends Component {
         <NavLink to="/">
           <label style={{ paddingLeft: 5, fontSize: 40 }}>&#x2630;</label>
         </NavLink>
-        <NavLink to="/watchlist">
+        <NavLink to="/watchmovielist">
           <label style={{ fontSize: 60 }}>&#9734;</label>
         </NavLink>
       </div>
