@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./MovieBox.css";
+import "./Movies.css";
 import "./circle.css";
 import $ from "jquery";
 import { FaHeart } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-class WatchMovie extends Component {
+class MovieBox extends Component {
   state = {
     watchlist: [],
     items: [],
@@ -18,9 +18,9 @@ class WatchMovie extends Component {
     crew: [],
     cast: [],
     relatedMovies: [],
-    backdrops: [],
     relatedMovieTitle: "",
     backgroundsTitle: "",
+    backdrops: [],
     trailer: [
       {
         key: "QMtHZGn1Ka4"
@@ -34,26 +34,57 @@ class WatchMovie extends Component {
     ]
   };
 
-  handleRemove(event) {
+  handleAdd(event) {
     var id = this.props.movie.id;
-    this.removeMovie(id);
+    this.addToWatchList(id);
   }
-  // remove the movie from watchlist
-  removeMovie(id) {
-    var savedWatchlist = JSON.parse(localStorage.getItem("watchlist"));
-    savedWatchlist = savedWatchlist.filter(function(e) {
-      return e.id !== id;
-    });
-    localStorage.setItem("watchlist", JSON.stringify(savedWatchlist));
+  // add the movie to watchlist
+  addToWatchList(id) {
+    var watchMovies;
+    watchMovies = {
+      id: id,
+      title: this.props.movie.title,
+      release_date: this.props.movie.release_date,
+      poster: this.props.movie.poster,
+      vote_average: this.props.movie.vote_average,
+      overview: this.props.movie.overview
+    };
+    var savedWatchlist = [];
+    savedWatchlist = Array.from(JSON.parse(localStorage.getItem("watchlist")));
+    if (savedWatchlist) {
+      savedWatchlist.push(watchMovies);
+      savedWatchlist = this.getUnique(savedWatchlist, "id");
+      localStorage.setItem("watchlist", JSON.stringify(savedWatchlist));
+      this.setState({
+        watchlist: savedWatchlist
+      });
+    } else {
+      this.setState({
+        watchlist: watchMovies
+      });
+      localStorage.setItem("watchlist", JSON.stringify(watchMovies));
+    }
+  }
+  // prevent watchlist from duplicating items
+  getUnique(arr, comp) {
+    const unique = arr
+      .map(e => e[comp])
 
-    this.props.displayWatchlist();
+      // store the keys of the unique objects
+      .map((e, i, final) => final.indexOf(e) === i && i)
+
+      // eliminate the dead keys & store unique objects
+      .filter(e => arr[e])
+      .map(e => arr[e]);
+
+    return unique;
   }
-  // get the detail info about the movie
+  //get the detail info of the movie
   movieDetail() {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "?api_key=4ccda7a34189fcea2fc752a6ee339500&append_to_response=credits";
+      "?api_key=40c4aa46310b723fa9400363a0f2893c&append_to_response=credits";
 
     $.ajax({
       url: urlString,
@@ -100,7 +131,7 @@ class WatchMovie extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/similar?api_key=4ccda7a34189fcea2fc752a6ee339500&language=en-US";
+      "/similar?api_key=40c4aa46310b723fa9400363a0f2893c&language=en-US";
 
     $.ajax({
       url: urlString,
@@ -133,7 +164,7 @@ class WatchMovie extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/images?api_key=4ccda7a34189fcea2fc752a6ee339500&language=ru-RU&include_image_language=ru,null";
+      "/images?api_key=40c4aa46310b723fa9400363a0f2893c&language=ru-RU&include_image_language=ru,null";
 
     $.ajax({
       url: urlString,
@@ -165,7 +196,7 @@ class WatchMovie extends Component {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
       this.props.movie.id +
-      "/videos?api_key=4ccda7a34189fcea2fc752a6ee339500&language=en-US";
+      "/videos?api_key=40c4aa46310b723fa9400363a0f2893c&language=en-US";
 
     $.ajax({
       url: urlString,
@@ -207,8 +238,8 @@ class WatchMovie extends Component {
       <div
         key={this.props.movie.id}
         style={{
-          width: 230,
-          height: 460,
+          width: "230px",
+          height: "420px",
           paddingTop: 25,
           color: "#00cca3",
           float: "left"
@@ -229,10 +260,14 @@ class WatchMovie extends Component {
                   <FaBookmark />
                 </button>
                 <span>Bookmark </span>
-                <button className="icon-btn">
+                <button
+                  className="icon-btn"
+                  id={this.props.movie.id}
+                  onClick={this.handleAdd.bind(this)}
+                >
                   <FaStar />
                 </button>{" "}
-                added to watchList
+                add to watchList
               </div>
 
               <div className="related-div">
@@ -259,6 +294,7 @@ class WatchMovie extends Component {
                   <strong>{this.props.movie.title}</strong>
                 </h2>
               </div>
+
               <div>
                 <div className="detail-top">
                   <div className={this.state.detail[0].percent_class}>
@@ -316,6 +352,7 @@ class WatchMovie extends Component {
                   <strong>Feature Crew</strong>
                   <br />
                 </div>
+
                 {this.state.crew.map(function(crew, index) {
                   return (
                     <div key={index} className="crew">
@@ -336,8 +373,8 @@ class WatchMovie extends Component {
                     <div className="cast" key={index}>
                       <div className="cast-profile">
                         <img alt="profile" src={cast.profile_path} />
-                        <br />
                       </div>
+                      <br />
                       {cast.name}
                       <br />
                       <span className="green-text">{cast.character}</span>
@@ -374,7 +411,6 @@ class WatchMovie extends Component {
               />
             </TrailerModal>
           </Modal>
-
           <div className="poster-container" id={this.props.movie.id}>
             <div
               className="poster"
@@ -395,14 +431,13 @@ class WatchMovie extends Component {
           <br />
           <center>
             <div className="title">
-              <strong>{this.props.movie.title}</strong>
+              <strong> {this.props.movie.title}</strong>
               <br />
-
               <span
                 style={{
+                  color: "#fff",
                   textAlign: "left",
-                  letterSpacing: "0.2mm",
-                  color: "#fff"
+                  letterSpacing: "0.2mm"
                 }}
               >
                 Year :
@@ -419,13 +454,6 @@ class WatchMovie extends Component {
                 <FaStar />
               </span>
             </div>
-            <button
-              className="btn-remove"
-              id={this.props.movie.id}
-              onClick={this.handleRemove.bind(this)}
-            >
-              Remove
-            </button>
           </center>
 
           <br />
@@ -441,9 +469,8 @@ const Modal = ({ handleClose, show, children }) => {
       <div className="modal-main">
         <button className="back-btn" onClick={handleClose}>
           <FaChevronCircleLeft />
-          Back to watchlist
+          Back to all movies
         </button>
-        <br />
         {children}
       </div>
     </div>
@@ -464,4 +491,4 @@ const TrailerModal = ({ handleCloseTrailer, show, children }) => {
   );
 };
 
-export default WatchMovie;
+export default MovieBox;

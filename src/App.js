@@ -3,7 +3,7 @@ import "./App.css";
 import "./FontStyle.css";
 //import { FaSistrix } from "react-icons/fa";
 
-import MovieBox from "./components/MovieBox.js";
+import Movies from "./components/Movies.js";
 
 import $ from "jquery";
 
@@ -26,7 +26,7 @@ class App extends Component {
       const urlString =
         "https://api.themoviedb.org/3/movie/" +
         searchTerm +
-        "?api_key=4ccda7a34189fcea2fc752a6ee339500&language=en-US&page=" +
+        "?api_key=40c4aa46310b723fa9400363a0f2893c&language=en-US&page=" +
         i;
 
       $.ajax({
@@ -39,7 +39,7 @@ class App extends Component {
               "https://image.tmdb.org/t/p/w185" + movie.poster_path;
             var date = movie.release_date.split("-");
             movie.release_date = date[0];
-            const movieBox = <MovieBox key={movie.id} movie={movie} />;
+            const movieBox = <Movies key={movie.id} movie={movie} />;
             movieBoxes.push(movieBox);
           });
           if (i === this.pageCnt) {
@@ -55,7 +55,7 @@ class App extends Component {
   // search movies by input keyword
   performSearch(searchTerm) {
     const urlString =
-      "https://api.themoviedb.org/3/search/movie?api_key=4ccda7a34189fcea2fc752a6ee339500&query=" +
+      "https://api.themoviedb.org/3/search/movie?api_key=40c4aa46310b723fa9400363a0f2893c&query=" +
       searchTerm;
 
     $.ajax({
@@ -73,7 +73,7 @@ class App extends Component {
           }
           var date = movie.release_date.split("-");
           movie.release_date = date[0];
-          const movieBox = <MovieBox key={movie.id} movie={movie} />;
+          const movieBox = <Movies key={movie.id} movie={movie} />;
           movieBoxes.push(movieBox);
         });
         this.setState({ rows: movieBoxes });

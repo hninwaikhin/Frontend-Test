@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navigation from "./Navigation";
 import App from "../App";
-import WatchList from "./WatchList";
+import WatchedLists from "./WatchedLists";
 import "./SideBar.css";
 class SideBar extends Component {
   state = {};
@@ -17,7 +17,7 @@ class SideBar extends Component {
             <Switch>
               <Route path="/" component={App} exact />
               <Route path="/frontend-test/" component={App} exact />
-              <Route path="/watchlist" component={WatchList} />
+              <Route path="/watchedlists" component={WatchedLists} />
             </Switch>
           </div>
         </div>

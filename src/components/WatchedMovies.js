@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./MovieBox.css";
+import "./Movies.css";
 import "./circle.css";
 import $ from "jquery";
 import { FaHeart } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-class MovieBox extends Component {
+class WatchedMovies extends Component {
   state = {
     watchlist: [],
     items: [],
@@ -18,9 +18,9 @@ class MovieBox extends Component {
     crew: [],
     cast: [],
     relatedMovies: [],
+    backdrops: [],
     relatedMovieTitle: "",
     backgroundsTitle: "",
-    backdrops: [],
     trailer: [
       {
         key: "QMtHZGn1Ka4"
@@ -34,52 +34,21 @@ class MovieBox extends Component {
     ]
   };
 
-  handleAdd(event) {
+  handleRemove(event) {
     var id = this.props.movie.id;
-    this.addToWatchList(id);
+    this.removeMovie(id);
   }
-  // add the movie to watchlist
-  addToWatchList(id) {
-    var watchMovies;
-    watchMovies = {
-      id: id,
-      title: this.props.movie.title,
-      release_date: this.props.movie.release_date,
-      poster: this.props.movie.poster,
-      vote_average: this.props.movie.vote_average,
-      overview: this.props.movie.overview
-    };
-    var savedWatchlist = [];
-    savedWatchlist = Array.from(JSON.parse(localStorage.getItem("watchlist")));
-    if (savedWatchlist) {
-      savedWatchlist.push(watchMovies);
-      savedWatchlist = this.getUnique(savedWatchlist, "id");
-      localStorage.setItem("watchlist", JSON.stringify(savedWatchlist));
-      this.setState({
-        watchlist: savedWatchlist
-      });
-    } else {
-      this.setState({
-        watchlist: watchMovies
-      });
-      localStorage.setItem("watchlist", JSON.stringify(watchMovies));
-    }
+  // remove the movie from watchlist
+  removeMovie(id) {
+    var savedWatchlist = JSON.parse(localStorage.getItem("watchlist"));
+    savedWatchlist = savedWatchlist.filter(function(e) {
+      return e.id !== id;
+    });
+    localStorage.setItem("watchlist", JSON.stringify(savedWatchlist));
+
+    this.props.displayWatchlist();
   }
-  // prevent watchlist from duplicating items
-  getUnique(arr, comp) {
-    const unique = arr
-      .map(e => e[comp])
-
-      // store the keys of the unique objects
-      .map((e, i, final) => final.indexOf(e) === i && i)
-
-      // eliminate the dead keys & store unique objects
-      .filter(e => arr[e])
-      .map(e => arr[e]);
-
-    return unique;
-  }
-  //get the detail info of the movie
+  // get the detail info about the movie
   movieDetail() {
     const urlString =
       "https://api.themoviedb.org/3/movie/" +
@@ -238,8 +207,8 @@ class MovieBox extends Component {
       <div
         key={this.props.movie.id}
         style={{
-          width: "230px",
-          height: "420px",
+          width: 230,
+          height: 460,
           paddingTop: 25,
           color: "#00cca3",
           float: "left"
@@ -260,14 +229,10 @@ class MovieBox extends Component {
                   <FaBookmark />
                 </button>
                 <span>Bookmark </span>
-                <button
-                  className="icon-btn"
-                  id={this.props.movie.id}
-                  onClick={this.handleAdd.bind(this)}
-                >
+                <button className="icon-btn">
                   <FaStar />
                 </button>{" "}
-                add to watchList
+                added to watchList
               </div>
 
               <div className="related-div">
@@ -294,7 +259,6 @@ class MovieBox extends Component {
                   <strong>{this.props.movie.title}</strong>
                 </h2>
               </div>
-
               <div>
                 <div className="detail-top">
                   <div className={this.state.detail[0].percent_class}>
@@ -352,7 +316,6 @@ class MovieBox extends Component {
                   <strong>Feature Crew</strong>
                   <br />
                 </div>
-
                 {this.state.crew.map(function(crew, index) {
                   return (
                     <div key={index} className="crew">
@@ -373,8 +336,8 @@ class MovieBox extends Component {
                     <div className="cast" key={index}>
                       <div className="cast-profile">
                         <img alt="profile" src={cast.profile_path} />
+                        <br />
                       </div>
-                      <br />
                       {cast.name}
                       <br />
                       <span className="green-text">{cast.character}</span>
@@ -411,6 +374,7 @@ class MovieBox extends Component {
               />
             </TrailerModal>
           </Modal>
+
           <div className="poster-container" id={this.props.movie.id}>
             <div
               className="poster"
@@ -431,13 +395,14 @@ class MovieBox extends Component {
           <br />
           <center>
             <div className="title">
-              <strong> {this.props.movie.title}</strong>
+              <strong>{this.props.movie.title}</strong>
               <br />
+
               <span
                 style={{
-                  color: "#fff",
                   textAlign: "left",
-                  letterSpacing: "0.2mm"
+                  letterSpacing: "0.2mm",
+                  color: "#fff"
                 }}
               >
                 Year :
@@ -454,6 +419,13 @@ class MovieBox extends Component {
                 <FaStar />
               </span>
             </div>
+            <button
+              className="btn-remove"
+              id={this.props.movie.id}
+              onClick={this.handleRemove.bind(this)}
+            >
+              Remove
+            </button>
           </center>
 
           <br />
@@ -469,8 +441,9 @@ const Modal = ({ handleClose, show, children }) => {
       <div className="modal-main">
         <button className="back-btn" onClick={handleClose}>
           <FaChevronCircleLeft />
-          Back to all movies
+          Back to watchlist
         </button>
+        <br />
         {children}
       </div>
     </div>
@@ -491,4 +464,4 @@ const TrailerModal = ({ handleCloseTrailer, show, children }) => {
   );
 };
 
-export default MovieBox;
+export default WatchedMovies;

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import "./WatchList.css";
-import WatchMovie from "./WatchMovie.js";
-import MovieBox from "./MovieBox.js";
+import "./WatchedLists.css";
+import WatchedMovies from "./WatchedMovies.js";
+import Movies from "./Movies.js";
 import $ from "jquery";
 
-class WatchList extends Component {
+class WatchedLists extends Component {
   state = { watchList: [] };
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ class WatchList extends Component {
     }
     Array.prototype.forEach.call(watchlist, movie => {
       const movieBox = (
-        <WatchMovie
+        <WatchedMovies
           displayWatchlist={this.displayWatchlist}
           key={movie.id}
           movie={movie}
@@ -53,7 +53,7 @@ class WatchList extends Component {
             movie.poster =
               "https://www.underconsideration.com/brandnew/archives/google_broken_image_00_b_logo_detail.gif";
           }
-          const movieBox = <MovieBox key={movie.id} movie={movie} />;
+          const movieBox = <Movies key={movie.id} movie={movie} />;
           movieBoxes.push(movieBox);
         });
         this.setState({ rows: movieBoxes });
@@ -113,4 +113,4 @@ class WatchList extends Component {
   }
 }
 
-export default WatchList;
+export default WatchedLists;
