@@ -9,7 +9,7 @@ import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 
-class WatchMovieShow extends Component {
+class WatchMovie extends Component {
   state = {
     watchlist: [],
     items: [],
@@ -31,8 +31,17 @@ class WatchMovieShow extends Component {
         genres: [{ id: 18, name: "" }],
         percent_class: ""
       }
+    ],
+    genres: [
+      {
+        genres: [{ id: 18, name: "" }],
+        percent_class: ""
+      }
     ]
   };
+  componentDidMount() {
+    this.getGenres();
+  }
 
   handleRemove(event) {
     var id = this.props.movie.id;
@@ -40,13 +49,37 @@ class WatchMovieShow extends Component {
   }
   // remove the movie from watchlist
   removeMovie(id) {
-    var savedWatchlist = JSON.parse(localStorage.getItem("watchlist"));
+    var savedWatchlist = JSON.parse(localStorage.getItem("watchlistshow"));
     savedWatchlist = savedWatchlist.filter(function(e) {
       return e.id !== id;
     });
-    localStorage.setItem("watchlist", JSON.stringify(savedWatchlist));
-
+    localStorage.setItem("watchlistshow", JSON.stringify(savedWatchlist));
     this.props.displayWatchlist();
+  }
+  //get genres of movie
+  getGenres() {
+    const urlString =
+      "https://api.themoviedb.org/3/movie/" +
+      this.props.movie.id +
+      "?api_key=40c4aa46310b723fa9400363a0f2893c&append_to_response=credits";
+    $.ajax({
+      url: urlString,
+      success: searchResults => {
+        var detail = searchResults;
+        var genres = detail.genres;
+        if (genres.length > 2) {
+          genres = genres.slice(0, 2);
+          detail.genres = genres;
+        }
+        detail.percent_class = "";
+        var details = [];
+        details.push(detail);
+        this.setState({ genres: details });
+      },
+      error: (xhr, status, err) => {
+        console.error("Failed to fetch data");
+      }
+    });
   }
   // get the detail info about the movie
   movieDetail() {
@@ -209,7 +242,7 @@ class WatchMovieShow extends Component {
         style={{
           width: 230,
           height: 460,
-          paddingTop: 25,
+          paddingTop: 5,
           color: "#00cca3",
           float: "left"
         }}
@@ -236,7 +269,7 @@ class WatchMovieShow extends Component {
               </div>
 
               <div className="related-div">
-                <div className="modal-header" style={{ paddingLeft: 20 }}>
+                <div className="modal-header" style={{ paddingLeft: 30 }}>
                   <strong>{this.state.relatedMovieTitle}</strong>
                   <br />
                 </div>
@@ -254,11 +287,8 @@ class WatchMovieShow extends Component {
               </div>
             </div>
             <div className="modal-div2">
-              <div className="modal-title">
-                <h2>
-                  <strong>{this.props.movie.title}</strong>
-                </h2>
-              </div>
+              <div className="modal-title">{this.props.movie.title}</div>
+              <br />
               <div>
                 <div className="detail-top">
                   <div className={this.state.detail[0].percent_class}>
@@ -353,8 +383,10 @@ class WatchMovieShow extends Component {
               </div>
               {this.state.backdrops.map(function(backdrop, index) {
                 return (
-                  <div className="backdrops" key={index}>
-                    <img alt="backgrounds" src={backdrop.file_path} />
+                  <div className="backdrops-div" key={index}>
+                    <div className="backdrops">
+                      <img alt="backgrounds" src={backdrop.file_path} />
+                    </div>
                   </div>
                 );
               })}
@@ -401,10 +433,13 @@ class WatchMovieShow extends Component {
               <span
                 style={{
                   textAlign: "left",
-                  letterSpacing: "0.2mm",
                   color: "#fff"
                 }}
               >
+                Genres:
+                <span className="green-text">
+                  {this.state.genres[0].genres.map(g => g.name).join(", ")}
+                </span>{" "}
                 Year :
               </span>
               <span> {this.props.movie.release_date}</span>
@@ -424,7 +459,7 @@ class WatchMovieShow extends Component {
               id={this.props.movie.id}
               onClick={this.handleRemove.bind(this)}
             >
-              Remove
+              REMOVE
             </button>
           </center>
 
@@ -464,4 +499,4 @@ const TrailerModal = ({ handleCloseTrailer, show, children }) => {
   );
 };
 
-export default WatchMovieShow;
+export default WatchMovie;

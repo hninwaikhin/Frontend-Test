@@ -107,7 +107,7 @@ class App extends Component {
         <input
           className="search-box"
           style={{
-            fontSize: 20,
+            fontSize: 18,
             display: "block",
             width: "95%",
             marginTop: 0,
@@ -130,7 +130,7 @@ class App extends Component {
             id="popular"
             onClick={this.buttonHandler.bind(this)}
           >
-            Popular
+            POPULAR
           </button>
           <button
             type="button"
@@ -138,7 +138,7 @@ class App extends Component {
             id="top_rated"
             onClick={this.buttonHandler.bind(this)}
           >
-            Toprated
+            TOP RATED
           </button>
           <button
             type="button"
@@ -146,7 +146,7 @@ class App extends Component {
             id="upcoming"
             onClick={this.buttonHandler.bind(this)}
           >
-            Upcoming
+            UPCOMING
           </button>
           <button
             type="button"
@@ -154,13 +154,13 @@ class App extends Component {
             id="now_playing"
             onClick={this.buttonHandler.bind(this)}
           >
-            Playing
+            NOW PLAYING
           </button>
         </div>
         <div
           style={{
             position: "relative",
-            maxHeight: "430px",
+            maxHeight: "480px",
             overflowY: "scroll",
             overflowX: "hidden"
           }}
