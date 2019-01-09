@@ -447,12 +447,7 @@ class WatchMovie extends Component {
           </center>
           <center>
             <div className="vote">
-              <strong>{this.props.movie.vote_average}</strong>
-              <span className="icons">
-                <FaHeart />
-                <FaBookmark />
-                <FaStar />
-              </span>
+              <strong>{this.props.movie.vote_average}</strong>            
             </div>
             <button
               className="btn-remove"
